@@ -12,53 +12,56 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23eef3fb'/%3E%3Ccircle cx='90' cy='90' r='58' fill='%23b9d3f0'/%3E%3Ccircle cx='90' cy='90' r='36' fill='%23dfeaf8'/%3E%3C/svg%3E">
 <title>Ademhaling voor Maria</title>
 <style>
-  :root{
-    --bg1:#eef3fb; --bg2:#f6eef8; --ink:#4a5568; --soft:#7b8794;
-    --c-in:#b9d3f0; --c-hold:#d6c8ee; --c-out:#bfe3d4; --accent:#8fb3dc;
-  }
+  :root{ --bg1:#eef3fb; --bg2:#f6eef8; --ink:#4a5568; --soft:#7b8794;
+    --c-in:#b9d3f0; --c-hold:#d6c8ee; --c-out:#bfe3d4; --c-intro:#e6e9f2; --accent:#8fb3dc; }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%;overflow:hidden;background:var(--bg1);color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     -webkit-user-select:none;user-select:none;-webkit-text-size-adjust:100%}
-  body{background:linear-gradient(160deg,var(--bg1),var(--bg2));transition:background 2s}
+  body{background:linear-gradient(160deg,var(--bg1),var(--bg2))}
   .screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
-    padding:max(24px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));
+    padding:max(24px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));
     text-align:center}
   .screen.active{display:flex;animation:fadein 1s ease}
   @keyframes fadein{from{opacity:0}to{opacity:1}}
-  h1{font-weight:500;font-size:clamp(36px,6.5vmin,64px);margin:0 0 .3em;letter-spacing:.01em}
-  p.lead{font-size:clamp(20px,3.4vmin,30px);color:var(--soft);margin:0 0 1.6em;line-height:1.45;max-width:30em}
+  h1{font-weight:500;font-size:clamp(36px,6.5vmin,64px);margin:0 0 .3em}
+  p.lead{font-size:clamp(20px,3.3vmin,30px);color:var(--soft);margin:0 0 1.3em;line-height:1.45;max-width:30em}
   .big-btn{font:inherit;font-size:clamp(30px,5.5vmin,52px);font-weight:500;color:#fff;background:var(--accent);
     border:none;border-radius:999px;padding:.55em 2.2em;box-shadow:0 10px 30px rgba(120,150,200,.35);cursor:pointer}
   .big-btn:active{transform:scale(.97)}
-  .settings{margin-top:2.2em;display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:center;align-items:center;
-    font-size:clamp(16px,2.4vmin,20px);color:var(--soft)}
+  .settings{margin-top:1.8em;display:flex;flex-wrap:wrap;gap:12px 26px;justify-content:center;align-items:center;
+    font-size:clamp(16px,2.3vmin,20px);color:var(--soft)}
   .settings label{display:flex;align-items:center;gap:8px}
   .settings input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent)}
   .settings select{font:inherit;font-size:inherit;color:var(--ink);background:rgba(255,255,255,.7);border:1px solid #d5deea;
     border-radius:10px;padding:6px 10px;max-width:60vw}
-  /* Oefenscherm */
+  .tip{margin-top:1.6em;max-width:40em;font-size:clamp(14px,2vmin,17px);line-height:1.5;color:var(--soft);
+    background:rgba(255,255,255,.45);border-radius:16px;padding:12px 18px}
+  .tip b{font-weight:600;color:#66758a}
+  .note{font-size:14px;color:var(--soft);margin-top:1em;opacity:.8}
   #run{justify-content:space-between}
   .top{width:100%;display:flex;justify-content:space-between;align-items:center;min-height:48px}
-  .remaining{font-size:clamp(20px,3.2vmin,30px);color:var(--soft);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+  .remaining{font-size:clamp(20px,3.2vmin,30px);color:var(--soft);font-variant-numeric:tabular-nums;letter-spacing:.04em;text-align:left}
   .remaining small{display:block;font-size:.55em;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
   .ctrls{display:flex;gap:10px}
   .ctrl{font:inherit;font-size:clamp(14px,2vmin,18px);color:var(--soft);background:rgba(255,255,255,.55);border:1px solid rgba(180,195,215,.6);
     border-radius:999px;padding:8px 16px;cursor:pointer;min-width:44px;min-height:44px}
   .ctrl:active{background:rgba(255,255,255,.9)}
   .middle{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:0}
-  .stage{position:relative;width:min(62vmin,560px);height:min(62vmin,560px);display:flex;align-items:center;justify-content:center}
-  .circle{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.75),var(--c-in) 70%);
+  .stage{position:relative;width:min(60vmin,560px);height:min(60vmin,560px);display:flex;align-items:center;justify-content:center}
+  .circle{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.75),var(--c-intro) 70%);
     box-shadow:0 0 60px rgba(150,180,220,.45);transform:scale(.55);will-change:transform;transition:background 1.5s}
   .ring{position:absolute;inset:0;border-radius:50%;border:2px dashed rgba(140,160,190,.25)}
-  .count{position:relative;font-size:clamp(110px,24vmin,240px);font-weight:300;line-height:1;font-variant-numeric:tabular-nums;color:#56657a}
-  .phase{font-size:clamp(28px,5.4vmin,54px);font-weight:500;margin-top:.55em;min-height:1.3em;line-height:1.2}
-  .enc{height:2.4em;font-size:clamp(22px,3.8vmin,36px);color:#8a7aa8;opacity:0;transition:opacity 2.2s ease;font-style:italic}
+  .count{position:relative;font-size:clamp(110px,24vmin,240px);font-weight:300;line-height:1;font-variant-numeric:tabular-nums;color:#56657a;min-height:1em}
+  .phase{font-size:clamp(28px,5.2vmin,52px);font-weight:500;margin-top:.5em;min-height:1.3em;line-height:1.2}
+  .pausednote{font-size:clamp(18px,2.8vmin,26px);color:var(--soft);min-height:1.4em}
+  .enc{min-height:1.6em;font-size:clamp(22px,3.8vmin,36px);color:#8a7aa8;opacity:0;transition:opacity 2s ease;font-style:italic}
   .enc.show{opacity:1}
   body.paused .circle{opacity:.6}
-  .pausednote{font-size:clamp(18px,2.8vmin,26px);color:var(--soft);height:1.4em}
+  .voiceind{font-size:clamp(13px,1.8vmin,16px);color:var(--soft);opacity:.75;min-height:1.4em}
+  .voiceind .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#c5cfdc;margin-right:6px;vertical-align:middle;transition:background .2s}
+  .voiceind .dot.on{background:#8fc3a8}
   #end .big-btn{margin-top:1.2em}
-  .note{font-size:14px;color:var(--soft);margin-top:1.5em;opacity:.8}
 </style>
 </head>
 <body>
@@ -68,9 +71,14 @@
   <p class="lead">We gaan 15 minuten rustig ademen.<br>4 tellen in door je neus, 7 tellen vasthouden,<br>8 tellen langzaam uitblazen door je mond.</p>
   <button id="startBtn" class="big-btn">Start</button>
   <div class="settings">
-    <label><input type="checkbox" id="optSound" checked> Zachte tonen</label>
     <label><input type="checkbox" id="optVoice" checked> Stem</label>
     <label id="voiceWrap">Stemkeuze: <select id="voiceSel"><option value="">Standaard</option></select></label>
+    <label><input type="checkbox" id="optSound" checked> Zachte belletjes</label>
+  </div>
+  <div class="tip">
+    <b>Tip:</b> zet de stille modus van de iPad uit en het volume omhoog, anders hoor je de stem niet.<br>
+    Mooiere stem? Download een verbeterde Nederlandse stem, bv. <b>Ellen (verbeterd)</b> of <b>Ellen (premium)</b>, via
+    <b>Instellingen &gt; Toegankelijkheid &gt; Gesproken materiaal &gt; Stemmen &gt; Nederlands</b>.
   </div>
   <div class="note" id="testNote"></div>
 </section>
@@ -79,8 +87,8 @@
   <div class="top">
     <div class="remaining"><small>Nog</small><span id="remain">15:00</span></div>
     <div class="ctrls">
-      <button class="ctrl" id="soundBtn" aria-label="Geluid">🔔</button>
-      <button class="ctrl" id="voiceBtn" aria-label="Stem">🗣️</button>
+      <button class="ctrl" id="voiceBtn" aria-label="Stem aan/uit">🗣️</button>
+      <button class="ctrl" id="soundBtn" aria-label="Belletjes aan/uit">🔔</button>
       <button class="ctrl" id="pauseBtn">Pauze</button>
       <button class="ctrl" id="stopBtn">Stop</button>
     </div>
@@ -89,13 +97,13 @@
     <div class="stage">
       <div class="ring"></div>
       <div class="circle" id="circle"></div>
-      <div class="count" id="count">1</div>
+      <div class="count" id="count"></div>
     </div>
-    <div class="phase" id="phase">Adem in door je neus</div>
+    <div class="phase" id="phase">Welkom, Maria</div>
     <div class="pausednote" id="pausedNote"></div>
     <div class="enc" id="enc"></div>
   </div>
-  <div style="height:48px"></div>
+  <div class="voiceind" id="voiceInd"><span class="dot" id="voiceDot"></span><span id="voiceName"></span></div>
 </section>
 
 <section id="end" class="screen">
@@ -109,230 +117,307 @@
   "use strict";
   var qs = new URLSearchParams(location.search);
   var TEST = qs.get("test") === "1";
-  var SPEED = Math.max(0.1, parseFloat(qs.get("speed")) || 1);   // alleen voor testen
-  var TOTAL = TEST ? 60 : 15*60;                                    // seconden
-  var ENC_EVERY = TEST ? 20 : 90;                                   // aanmoediging elke ~1,5 min
+  var SPEED = Math.max(0.1, parseFloat(qs.get("speed")) || 1);  // alleen voor testen
+  var TOTAL = TEST ? 60 : 15*60;       // seconden
+  var INTRO = 5;                        // welkom vóór de eerste inademing
+  var ENC_EVERY = TEST ? 20 : 90;       // aanmoediging ongeveer elke 1,5 minuut
+  var RATE = 0.9;                       // spreeksnelheid
+
+  // Exacte uitgesproken zinnen
   var PHASES = [
-    {key:"in",   len:4, text:"Adem in door je neus",          say:"Adem in door je neus",          color:"var(--c-in)"},
-    {key:"hold", len:7, text:"Houd vast",                     say:"Houd vast",                     color:"var(--c-hold)"},
-    {key:"out",  len:8, text:"Blaas langzaam uit door je mond", say:"Blaas langzaam uit door je mond", color:"var(--c-out)"}
+    {key:"in",   len:4, start:0,  text:"Adem in door je neus",            cue:"Adem nu in, Maria, vier seconden.",   color:"var(--c-in)"},
+    {key:"hold", len:7, start:4,  text:"Houd vast",                       cue:"Vasthouden, Maria.",                  color:"var(--c-hold)"},
+    {key:"out",  len:8, start:11, text:"Blaas langzaam uit door je mond", cue:"En uitademen, Maria, acht seconden.", color:"var(--c-out)"}
   ];
   var CYCLE = 19;
-  var ENCS = ["Goed zo, Maria","Blijf rustig","Je doet het geweldig, Maria","Mooi zo, rustig verder",
-              "Heel goed, Maria","Rustig en ontspannen","Je doet het prima, Maria","Laat alles maar los"];
+  var NUM = ["", "één", "twee", "drie", "vier", "vijf", "zes", "zeven", "acht"];
+  var WELCOME = "Welkom, Maria. Ga rustig zitten. We beginnen.";
+  var THANKS = "Dank je wel, Maria. Goed gedaan.";
+  var ENCS = ["Goed zo, Maria.", "Blijf rustig, Maria.", "Je doet het geweldig, Maria.", "Mooi zo, rustig verder.",
+              "Heel goed, Maria.", "Rustig en ontspannen, Maria.", "Je doet het prima, Maria.", "Laat alles maar los, Maria."];
 
-  var $ = function(id){return document.getElementById(id);};
-  var el = {start:$("start"),run:$("run"),end:$("end"),count:$("count"),phase:$("phase"),circle:$("circle"),
-            remain:$("remain"),enc:$("enc"),pauseBtn:$("pauseBtn"),soundBtn:$("soundBtn"),voiceBtn:$("voiceBtn"),
-            pausedNote:$("pausedNote"),voiceSel:$("voiceSel"),optSound:$("optSound"),optVoice:$("optVoice")};
+  var $ = function(id){ return document.getElementById(id); };
+  var el = {start:$("start"), run:$("run"), end:$("end"), count:$("count"), phase:$("phase"), circle:$("circle"),
+    remain:$("remain"), enc:$("enc"), pauseBtn:$("pauseBtn"), soundBtn:$("soundBtn"), voiceBtn:$("voiceBtn"),
+    pausedNote:$("pausedNote"), voiceSel:$("voiceSel"), optSound:$("optSound"), optVoice:$("optVoice"),
+    voiceName:$("voiceName"), voiceDot:$("voiceDot")};
   if (TEST) $("testNote").textContent = "Testmodus: " + TOTAL + " s" + (SPEED !== 1 ? ", snelheid x" + SPEED : "");
 
-  // Testlog (voor geautomatiseerde controle)
   window.__log = [];
-  function log(type, data){ var e = {type:type, t:+elapsedSec().toFixed(3)}; for (var k in data) e[k]=data[k]; window.__log.push(e); }
+  function log(type, data){ var e = {type:type, t:+sessionSec().toFixed(3)}; if (data) for (var k in data) e[k] = data[k]; window.__log.push(e); }
 
-  // ---------- Opslag voorkeuren ----------
-  function lsGet(k,d){ try{ var v = localStorage.getItem(k); return v===null?d:v; }catch(e){ return d; } }
-  function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-  var soundOn = lsGet("adem.sound","1") === "1";
-  var voiceOn = lsGet("adem.voice","1") === "1";
+  function lsGet(k, d){ try{ var v = localStorage.getItem(k); return v === null ? d : v; }catch(e){ return d; } }
+  function lsSet(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+  var soundOn = lsGet("adem.sound", "1") === "1";
+  var voiceOn = lsGet("adem.voice", "1") === "1";
   el.optSound.checked = soundOn; el.optVoice.checked = voiceOn;
 
-  // ---------- Audio (Web Audio API, geen bestanden) ----------
-  var ctx = null, master = null;
+  // ================= Zachte belletjes (Web Audio, geen bestanden) =================
+  var actx = null, master = null;
   function initAudio(){
     try{
-      if (navigator.audioSession) { try{ navigator.audioSession.type = "playback"; }catch(e){} } // iOS 17+: speel ook met stille schakelaar
-      if (!ctx){
-        var AC = window.AudioContext || window.webkitAudioContext;
-        if (!AC) return;
-        ctx = new AC();
-        master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination);
+      if (navigator.audioSession){ try{ navigator.audioSession.type = "playback"; }catch(e){} } // iOS 17+: ook met stille schakelaar
+      if (!actx){
+        var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+        actx = new AC(); master = actx.createGain(); master.gain.value = 0.8; master.connect(actx.destination);
       }
-      if (ctx.state !== "running" && ctx.resume) ctx.resume();
-      // stille buffer om iOS te ontgrendelen
-      var b = ctx.createBuffer(1, 1, 22050), s = ctx.createBufferSource();
-      s.buffer = b; s.connect(ctx.destination); s.start(0);
+      if (actx.state !== "running" && actx.resume) actx.resume();
+      var b = actx.createBuffer(1, 1, 22050), s = actx.createBufferSource(); s.buffer = b; s.connect(actx.destination); s.start(0);
     }catch(e){}
   }
-  function tone(freq, start, dur, vol, type){
-    if (!ctx || !soundOn) return;
-    var t0 = ctx.currentTime + (start||0);
-    var o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = type || "sine"; o.frequency.value = freq;
-    g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(vol, t0 + 0.015);
-    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-    o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + dur + 0.05);
+  function tone(freq, start, dur, vol){
+    if (!actx || !soundOn) return;
+    try{
+      var t0 = actx.currentTime + (start || 0), o = actx.createOscillator(), g = actx.createGain();
+      o.type = "sine"; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g); g.connect(master); o.start(t0); o.stop(t0 + dur + 0.05);
+    }catch(e){}
   }
-  function tick(){ tone(880, 0, 0.09, 0.035); }
-  function phaseTone(key){
-    if (key === "in")   { tone(523.25,0,0.6,0.09); tone(659.25,0.16,0.7,0.08); }
-    if (key === "hold") { tone(587.33,0,0.8,0.08); tone(880,0,0.8,0.025); }
-    if (key === "out")  { tone(659.25,0,0.6,0.08); tone(493.88,0.16,0.9,0.08); }
+  function phaseChime(key){
+    if (key === "in")   { tone(523.25, 0, 0.7, 0.04); tone(659.25, 0.15, 0.8, 0.035); }
+    if (key === "hold") { tone(587.33, 0, 0.9, 0.035); }
+    if (key === "out")  { tone(659.25, 0, 0.7, 0.035); tone(493.88, 0.15, 0.9, 0.035); }
   }
-  function endTone(){ [523.25,659.25,783.99].forEach(function(f,i){ tone(f, i*0.25, 2.2, 0.06); }); }
+  function tick(){ tone(880, 0, 0.08, 0.03); }   // alleen als de stem uit staat / niet beschikbaar is
+  function endChime(){ [523.25, 659.25, 783.99].forEach(function(f, i){ tone(f, i * 0.25, 2.2, 0.04); }); }
 
-  // ---------- Stem (Speech Synthesis) — voorkeur: Ellen (nl-BE) ----------
-  var synth = window.speechSynthesis || null;
+  // ================= Stem (Web Speech API) — hoofdkanaal =================
+  var synth = ("speechSynthesis" in window) ? window.speechSynthesis : null;
+  var Utter = window.SpeechSynthesisUtterance;
   var voices = [], chosenVoice = null;
-  var FEMALE = /ellen|claire|lotte|fenna|colette|dena|marlies|ilse|laura|sanne|anouk|femke|hanna|emma|sofie|charlotte|nora|lisa|vrouw|female/i;
-  function quality(v){ var s = (v.name+" "+(v.voiceURI||"")).toLowerCase();
-    return /premium/.test(s) ? 2 : (/enhanced|verbeterd|natural/.test(s) ? 1 : 0); }
-  function lang(v){ return (v.lang||"").replace("_","-").toLowerCase(); }
+  var FEMALE = /ellen|claire|lotte|fenna|colette|dena|marlies|ilse|laura|sanne|anouk|femke|hanna|emma|sofie|charlotte|nora|lisa|fleur|vrouw|female/i;
+  function quality(v){ var s = (v.name + " " + (v.voiceURI || "")).toLowerCase();
+    return /premium/.test(s) ? 2 : (/enhanced|verbeterd|natural|neural/.test(s) ? 1 : 0); }
+  function vlang(v){ return (v.lang || "").replace("_", "-").toLowerCase(); }
+  // Voorkeur: Ellen (nl-BE; premium > verbeterd > standaard) > andere nl-BE vrouw > nl-NL Claire > andere nl
   function score(v){
-    var L = lang(v), n = v.name.toLowerCase(), q = quality(v);
-    if (/(^|[^a-z])ellen([^a-z]|$)/.test(n)) return 4000 + q*10 + (L==="nl-be"?5:0);
+    var L = vlang(v), n = (v.name || "").toLowerCase(), q = quality(v);
+    if (/(^|[^a-z])ellen([^a-z]|$)/.test(n) && (L.indexOf("nl") === 0 || L === "")) return 4000 + q*10 + (L === "nl-be" ? 5 : 0);
     if (L === "nl-be" && FEMALE.test(n)) return 3000 + q*10;
     if (L === "nl-nl" && /claire/.test(n)) return 2000 + q*10;
-    if (L.indexOf("nl") === 0) return 1000 + q*10 + (L==="nl-be"?3:0) + (L==="nl-nl"?2:0) + (FEMALE.test(n)?1:0);
+    if (L.indexOf("nl") === 0) return 1000 + q*10 + (L === "nl-be" ? 3 : 0) + (FEMALE.test(n) ? 1 : 0);
     return -1;
   }
   function vid(v){ return (v.voiceURI || v.name) + "|" + v.lang; }
+  function voiceLabel(){
+    if (!synth) return "Stem niet beschikbaar in deze browser";
+    if (!chosenVoice) return "Geen Nederlandse stem gevonden";
+    return "Stem: " + chosenVoice.name + " (" + chosenVoice.lang + ")";
+  }
   function loadVoices(){
     if (!synth) return;
-    var all = synth.getVoices() || [];
-    voices = all.filter(function(v){ return score(v) >= 0; }).sort(function(a,b){ return score(b)-score(a); });
-    var sel = el.voiceSel, saved = lsGet("adem.voiceId","");
+    var all = []; try{ all = synth.getVoices() || []; }catch(e){}
+    voices = all.filter(function(v){ return score(v) >= 0; }).sort(function(a, b){ return score(b) - score(a); });
+    var sel = el.voiceSel, saved = lsGet("adem.voiceId", "");
     sel.innerHTML = "";
-    if (!voices.length){ var o = document.createElement("option"); o.value=""; o.textContent="Standaard (nl)"; sel.appendChild(o); chosenVoice=null; return; }
-    voices.forEach(function(v){ var o = document.createElement("option"); o.value = vid(v);
-      o.textContent = v.name + " (" + v.lang + ")"; sel.appendChild(o); });
-    var pick = voices.filter(function(v){ return vid(v) === saved; })[0] || voices[0];
-    chosenVoice = pick; sel.value = vid(pick);
+    if (!voices.length){ var o0 = document.createElement("option"); o0.value = ""; o0.textContent = "Standaard (nl-BE)"; sel.appendChild(o0); chosenVoice = null; }
+    else {
+      voices.forEach(function(v){ var o = document.createElement("option"); o.value = vid(v); o.textContent = v.name + " (" + v.lang + ")"; sel.appendChild(o); });
+      chosenVoice = voices.filter(function(v){ return vid(v) === saved; })[0] || voices[0];
+      sel.value = vid(chosenVoice);
+    }
+    el.voiceName.textContent = voiceLabel();
   }
   if (synth){
     loadVoices();
-    if (synth.addEventListener) synth.addEventListener("voiceschanged", loadVoices); else synth.onvoiceschanged = loadVoices;
-    setTimeout(loadVoices, 500); setTimeout(loadVoices, 1500);
-  } else { $("voiceWrap").style.display = "none"; }
+    try{ if (synth.addEventListener) synth.addEventListener("voiceschanged", loadVoices); else synth.onvoiceschanged = loadVoices; }catch(e){}
+    setTimeout(loadVoices, 400); setTimeout(loadVoices, 1500); setTimeout(loadVoices, 4000);
+  } else { $("voiceWrap").style.display = "none"; el.voiceName.textContent = voiceLabel(); }
   el.voiceSel.addEventListener("change", function(){
     chosenVoice = voices.filter(function(v){ return vid(v) === el.voiceSel.value; })[0] || null;
-    lsSet("adem.voiceId", el.voiceSel.value);
+    lsSet("adem.voiceId", el.voiceSel.value); el.voiceName.textContent = voiceLabel();
   });
-  function say(text){
-    log("say", {text:text});
-    if (!synth || !voiceOn) return;
+
+  // "busy" = een zin (signaal, welkom, aanmoediging) wordt nog uitgesproken -> tellen die overlappen worden overgeslagen
+  var busy = null, lastStartReal = 0, speakSeq = 0;
+  function estSeconds(text){ // ruwe schatting (echte seconden) als vangnet als onend niet komt
+    var commas = (text.match(/[,.]/g) || []).length;
+    return text.length / 13 / RATE + commas * 0.2 + 0.3;
+  }
+  function makeUtter(text){
+    var u = new Utter(text);
+    if (chosenVoice){ u.voice = chosenVoice; u.lang = chosenVoice.lang; } else u.lang = "nl-BE";
+    u.rate = RATE; u.pitch = 1; u.volume = 1;
+    return u;
+  }
+  function setDot(on){ el.voiceDot.classList.toggle("on", !!on); }
+  // Belangrijke zin: blokkeert tellen tot hij klaar is.
+  function speakPhrase(text, kind, cancelFirst){
+    log("say", {text:text, kind:kind});
+    if (!synth || !voiceOn || !Utter) return;
     try{
-      synth.cancel();
-      var u = new SpeechSynthesisUtterance(text);
-      if (chosenVoice){ u.voice = chosenVoice; u.lang = chosenVoice.lang; } else u.lang = "nl-BE";
-      u.rate = 0.88; u.pitch = 1; u.volume = 1;
+      if (cancelFirst && (synth.speaking || synth.pending)) synth.cancel();
+      var u = makeUtter(text), id = ++speakSeq;
+      var b = {u:u, id:id, kind:kind, ended:false, started:false, untilReal: performance.now() + estSeconds(text) * 1000 * 1.6 + 400};
+      busy = b;
+      u.onstart = function(){ b.started = true; lastStartReal = performance.now(); setDot(true); };
+      u.onend = u.onerror = function(){ b.ended = true; setDot(false); };
       synth.speak(u);
+      if (synth.paused) synth.resume();
+      // iOS-vangnet: soms wordt speak() direct na cancel() genegeerd -> één keer opnieuw proberen
+      setTimeout(function(){
+        if (busy === b && !b.started && !b.ended && running && !paused && !synth.speaking){
+          log("retry", {text:text});
+          try{ synth.cancel(); synth.resume(); synth.speak(u); }catch(e){}
+        }
+      }, 700);
     }catch(e){}
   }
-  function unlockSpeech(){ if (!synth) return; try{ var u = new SpeechSynthesisUtterance(" "); u.volume = 0; synth.speak(u); }catch(e){} }
+  function isBusy(){
+    if (!busy || busy.ended) return false;
+    if (performance.now() > busy.untilReal) return false;     // onend kwam niet: niet eeuwig blokkeren
+    try{ if (busy.started && synth && !synth.speaking && !synth.pending) return false; }catch(e){} // klaar, ook zonder onend
+    return true;
+  }
+  function speakCount(n){
+    log("say", {text:NUM[n], kind:"count", n:n});
+    if (!synth || !voiceOn || !Utter) return;
+    try{
+      var u = makeUtter(NUM[n]);
+      u.onstart = function(){ lastStartReal = performance.now(); setDot(true); };
+      u.onend = u.onerror = function(){ setDot(false); };
+      synth.speak(u);
+      if (synth.paused) synth.resume();
+    }catch(e){}
+  }
+  function cancelSpeech(){ busy = null; if (synth) try{ synth.cancel(); }catch(e){} setDot(false); }
+  function voiceUsable(){ return !!(synth && voiceOn && Utter); }
 
-  // ---------- Wake Lock ----------
+  // iOS keep-alive: Safari kan de spraakmotor na een tijd 'gepauzeerd' laten hangen
+  setInterval(function(){
+    if (!synth || !running || paused) return;
+    try{
+      if (synth.paused){ synth.resume(); log("keepalive", {action:"resume"}); }
+      // vastgelopen: 'speaking' maar al > 12 s niets gestart
+      if (synth.speaking && !isBusy() && performance.now() - lastStartReal > 12000){ synth.cancel(); log("keepalive", {action:"unstick"}); }
+    }catch(e){}
+  }, 4000);
+
+  // ================= Wake Lock =================
   var wakeLock = null;
   function requestWake(){
     try{
-      if ("wakeLock" in navigator && document.visibilityState === "visible"){
-        navigator.wakeLock.request("screen").then(function(l){ wakeLock = l; log("wakelock",{ok:true});
-          l.addEventListener && l.addEventListener("release", function(){ wakeLock = null; }); })
-        .catch(function(){ log("wakelock",{ok:false}); });
+      if ("wakeLock" in navigator && document.visibilityState === "visible" && !wakeLock){
+        navigator.wakeLock.request("screen").then(function(l){ wakeLock = l;
+          l.addEventListener && l.addEventListener("release", function(){ wakeLock = null; }); }).catch(function(){});
       }
     }catch(e){}
   }
   function releaseWake(){ try{ if (wakeLock) wakeLock.release(); }catch(e){} wakeLock = null; }
 
-  // ---------- Timing (performance.now, geen driftende setInterval) ----------
+  // ================= Timing (performance.now, geen driftende setInterval) =================
   var running = false, paused = false, finished = false;
-  var t0 = 0, pausedAt = 0, pausedTotal = 0;
-  var lastPhaseIdx = -1, lastSec = -1, lastCycle = -1, nextEnc = ENC_EVERY, encTimer = null, encIdx = 0;
-  var rafId = 0, toId = 0, endAt = 0;
-  // Sessie eindigt na de uitademing van de cyclus die bezig is op 15:00 (nooit midden in een ademhaling stoppen).
+  var t0 = 0, pausedAt = 0, pausedTotal = 0, endAt = 0;
+  var lastKey = "", lastSec = -1, nextEnc = ENC_EVERY, encDue = false, encIdx = 0, encTimer = null;
+  var rafId = 0, toId = 0;
+  function rawSec(){ if (!running && !finished) return 0; var n = paused ? pausedAt : performance.now(); return (n - t0 - pausedTotal) / 1000 * SPEED; }
+  function sessionSec(){ return rawSec() - INTRO; }   // 0 = begin eerste inademing
+  // Eindigt na de uitademing van de cyclus die bezig is op 15:00 (nooit midden in een ademhaling stoppen).
   function computeEnd(){ return Math.ceil(TOTAL / CYCLE) * CYCLE; }
-  function now(){ return performance.now(); }
-  function elapsedSec(){
-    if (!running && !finished) return 0;
-    var n = paused ? pausedAt : now();
-    return (n - t0 - pausedTotal) / 1000 * SPEED;
-  }
-  function fmt(s){ s = Math.max(0, Math.ceil(s - 1e-6)); var m = Math.floor(s/60), r = s % 60; return (m<10?"0":"")+m+":"+(r<10?"0":"")+r; }
-  function ease(x){ return 0.5 - 0.5*Math.cos(Math.PI*x); }
+  function fmt(s){ s = Math.max(0, Math.ceil(s - 1e-6)); var m = Math.floor(s / 60), r = s % 60; return (m < 10 ? "0" : "") + m + ":" + (r < 10 ? "0" : "") + r; }
+  function ease(x){ return 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, x))); }
 
   function frame(){
     rafId = 0; clearTimeout(toId); toId = 0;
     if (!running || paused) return;
-    var e = elapsedSec();
+    var e = sessionSec();
     if (e >= endAt){ finish(); return; }
-    var c = Math.floor(e / CYCLE), inC = e - c*CYCLE;
-    var idx = inC < 4 ? 0 : (inC < 11 ? 1 : 2);
-    var ps = idx===0 ? 0 : (idx===1 ? 4 : 11);
-    var inP = inC - ps, P = PHASES[idx];
-    var sec = Math.min(P.len, Math.floor(inP) + 1);
-    var globalSec = Math.floor(e);
+    if (e < 0){ // welkom
+      el.remain.textContent = fmt(TOTAL);
+      schedule(); return;
+    }
+    var c = Math.floor(e / CYCLE), inC = e - c * CYCLE;
+    var idx = inC < 4 ? 0 : (inC < 11 ? 1 : 2), P = PHASES[idx];
+    var inP = inC - P.start, sec = Math.min(P.len, Math.floor(inP) + 1);
+    var key = c + ":" + idx, gsec = Math.floor(e);
 
-    if (idx !== lastPhaseIdx || c !== lastCycle){
-      lastPhaseIdx = idx; lastCycle = c;
+    if (key !== lastKey){
+      // nieuwe fase: restjes spraak afbreken, signaal uitspreken
+      lastKey = key; lastSec = gsec;
       el.phase.textContent = P.text;
       el.circle.style.background = "radial-gradient(circle at 40% 35%,rgba(255,255,255,.75)," + P.color + " 70%)";
-      phaseTone(P.key); say(P.say);
+      el.count.textContent = sec;
+      phaseChime(P.key);
       log("phase", {phase:P.key, cycle:c});
-      lastSec = globalSec; el.count.textContent = sec; log("sec",{phase:P.key, n:sec});
-    } else if (globalSec !== lastSec){
-      lastSec = globalSec; el.count.textContent = sec; tick(); log("sec",{phase:P.key, n:sec});
+      log("visual", {phase:P.key, n:sec});
+      speakPhrase(P.cue, "cue", true);
+      if (sec > 1) { /* na pauze/achtergrond midden in fase: geen extra tellen */ }
+    } else if (gsec !== lastSec){
+      lastSec = gsec;
+      el.count.textContent = sec;
+      log("visual", {phase:P.key, n:sec});
+      if (!voiceUsable()) tick();
+      else if (idx === 1 && encDue && sec >= 3 && sec <= 5 && !isBusy()){
+        encDue = false; showEnc(ENCS[encIdx++ % ENCS.length]);   // aanmoediging tijdens vasthouden, ritme loopt door
+      }
+      else if (!isBusy()) speakCount(sec);
+      else log("skip", {phase:P.key, n:sec});
     }
-    // cirkel: groeit bij inademen, blijft groot bij vasthouden, krimpt bij uitademen
+    if (!encDue && e >= nextEnc && e < TOTAL){ encDue = true; nextEnc = e + ENC_EVERY; }
+
     var sMin = 0.55, sMax = 1, sc;
-    if (idx === 0) sc = sMin + (sMax-sMin)*ease(inP/4);
+    if (idx === 0) sc = sMin + (sMax - sMin) * ease(inP / 4);
     else if (idx === 1) sc = sMax;
-    else sc = sMax - (sMax-sMin)*ease(inP/8);
+    else sc = sMax - (sMax - sMin) * ease(inP / 8);
     el.circle.style.transform = "scale(" + sc.toFixed(4) + ")";
-
-    // resterende tijd tot 15:00; daarna rondt de laatste uitademing rustig af
     el.remain.textContent = fmt(TOTAL - e);
-
-    // aanmoediging tijdens het vasthouden (rustig moment), elke ~1,5 min
-    if (e >= nextEnc && idx === 1 && inP >= 2.5 && e < TOTAL){
-      nextEnc = e + ENC_EVERY;
-      showEnc(ENCS[encIdx++ % ENCS.length]);
-    }
     schedule();
   }
   function schedule(){
     if (!rafId) rafId = requestAnimationFrame(frame);
-    if (!toId) toId = setTimeout(frame, 250); // vangnet als rAF wordt vertraagd
+    if (!toId) toId = setTimeout(frame, 100);   // vangnet als rAF vertraagd wordt
   }
   function showEnc(text){
     el.enc.textContent = text; el.enc.classList.add("show");
-    log("enc",{text:text});
-    setTimeout(function(){ if (running && !paused && voiceOn) say(text); }, 0);
+    log("enc", {text:text});
+    speakPhrase(text, "enc", false);
     clearTimeout(encTimer);
     encTimer = setTimeout(function(){ el.enc.classList.remove("show"); }, 9000);
   }
-  function show(id){ ["start","run","end"].forEach(function(s){ el[s].classList.toggle("active", s===id); }); }
+  function show(id){ ["start", "run", "end"].forEach(function(s){ el[s].classList.toggle("active", s === id); }); }
 
   function start(){
-    initAudio(); unlockSpeech(); requestWake();
+    // Alles in de tik zelf: audio ontgrendelen + spraak 'primen' met het welkomstwoord
+    initAudio(); requestWake();
+    if (synth){ loadVoices(); try{ synth.cancel(); synth.resume(); }catch(e){} }
     running = true; paused = false; finished = false;
-    t0 = now(); pausedTotal = 0; lastPhaseIdx = -1; lastSec = -1; lastCycle = -1;
-    nextEnc = ENC_EVERY; encIdx = 0; endAt = computeEnd();
-    window.__log = []; log("start",{total:TOTAL, endAt:endAt, speed:SPEED});
+    t0 = performance.now(); pausedTotal = 0; lastKey = ""; lastSec = -1;
+    nextEnc = ENC_EVERY; encDue = false; encIdx = 0; endAt = computeEnd();
+    window.__log = []; log("start", {total:TOTAL, endAt:endAt, speed:SPEED, voice: chosenVoice ? chosenVoice.name : null});
     el.enc.classList.remove("show"); el.pauseBtn.textContent = "Pauze"; el.pausedNote.textContent = "";
+    el.count.textContent = ""; el.phase.textContent = "Welkom, Maria";
+    el.circle.style.background = "radial-gradient(circle at 40% 35%,rgba(255,255,255,.75),var(--c-intro) 70%)";
+    el.circle.style.transform = "scale(.55)";
     document.body.classList.remove("paused");
-    updateToggles(); show("run"); frame();
+    el.voiceName.textContent = voiceOn ? voiceLabel() : "Stem uit";
+    updateToggles(); show("run");
+    speakPhrase(WELCOME, "welcome", false);   // synchroon in de tik = iOS-prime
+    frame();
   }
   function finish(){
     running = false; finished = true; cancelAnimationFrame(rafId); clearTimeout(toId); rafId = toId = 0;
-    log("end",{});
-    endTone(); setTimeout(function(){ say("Dank je wel, Maria. Goed gedaan."); }, 400);
+    log("end");
+    endChime(); cancelSpeech(); speakPhrase(THANKS, "thanks", false);
     releaseWake(); el.enc.classList.remove("show"); show("end");
   }
   function stop(){
     running = false; paused = false; cancelAnimationFrame(rafId); clearTimeout(toId); rafId = toId = 0;
-    if (synth) try{ synth.cancel(); }catch(e){}
-    releaseWake(); log("stop",{}); show("start");
+    cancelSpeech(); releaseWake(); log("stop"); show("start");
   }
   function togglePause(){
     if (!running) return;
-    if (!paused){ paused = true; pausedAt = now(); if (synth) try{ synth.cancel(); }catch(e){}
+    if (!paused){
+      paused = true; pausedAt = performance.now(); cancelSpeech();
       el.pauseBtn.textContent = "Verder"; el.pausedNote.textContent = "Gepauzeerd — tik op ‘Verder’ als je klaar bent";
-      document.body.classList.add("paused"); log("pause",{}); }
-    else { initAudio(); pausedTotal += now() - pausedAt; paused = false;
+      document.body.classList.add("paused"); log("pause");
+    } else {
+      initAudio(); if (synth) try{ synth.resume(); }catch(e){}
+      pausedTotal += performance.now() - pausedAt; paused = false;
       el.pauseBtn.textContent = "Pauze"; el.pausedNote.textContent = ""; document.body.classList.remove("paused");
-      lastPhaseIdx = -1; log("resume",{}); requestWake(); frame(); }
+      log("resume"); requestWake(); frame();
+    }
   }
   function updateToggles(){
     el.soundBtn.textContent = soundOn ? "🔔" : "🔕"; el.soundBtn.style.opacity = soundOn ? 1 : .55;
@@ -341,25 +426,29 @@
 
   $("startBtn").addEventListener("click", function(){
     soundOn = el.optSound.checked; voiceOn = el.optVoice.checked;
-    lsSet("adem.sound", soundOn?"1":"0"); lsSet("adem.voice", voiceOn?"1":"0");
+    lsSet("adem.sound", soundOn ? "1" : "0"); lsSet("adem.voice", voiceOn ? "1" : "0");
     start();
   });
   $("restartBtn").addEventListener("click", start);
   $("stopBtn").addEventListener("click", stop);
   el.pauseBtn.addEventListener("click", togglePause);
-  el.soundBtn.addEventListener("click", function(){ soundOn = !soundOn; el.optSound.checked = soundOn; lsSet("adem.sound", soundOn?"1":"0"); initAudio(); updateToggles(); });
-  el.voiceBtn.addEventListener("click", function(){ voiceOn = !voiceOn; el.optVoice.checked = voiceOn; lsSet("adem.voice", voiceOn?"1":"0");
-    if (!voiceOn && synth) try{ synth.cancel(); }catch(e){} updateToggles(); });
-
+  el.soundBtn.addEventListener("click", function(){ soundOn = !soundOn; el.optSound.checked = soundOn; lsSet("adem.sound", soundOn ? "1" : "0"); initAudio(); updateToggles(); });
+  el.voiceBtn.addEventListener("click", function(){
+    voiceOn = !voiceOn; el.optVoice.checked = voiceOn; lsSet("adem.voice", voiceOn ? "1" : "0");
+    if (!voiceOn) cancelSpeech(); else if (synth) try{ synth.resume(); }catch(e){}
+    el.voiceName.textContent = voiceOn ? voiceLabel() : "Stem uit"; updateToggles();
+  });
   document.addEventListener("visibilitychange", function(){
-    if (document.visibilityState === "visible"){
-      if (running && !paused){ requestWake(); initAudio(); frame(); }
+    if (document.visibilityState === "visible" && running && !paused){
+      requestWake(); initAudio(); if (synth) try{ synth.resume(); }catch(e){} frame();
     }
   });
-  // test-hulp
-  window.__state = function(){ return {running:running, paused:paused, finished:finished, elapsed:elapsedSec(), endAt:endAt,
+
+  // test-hulpjes
+  window.__state = function(){ return {running:running, paused:paused, finished:finished, elapsed:sessionSec(), endAt:endAt,
     voice: chosenVoice ? chosenVoice.name + " (" + chosenVoice.lang + ")" : null}; };
-  window.__rankVoices = function(list){ return list.slice().filter(function(v){return score(v)>=0;}).sort(function(a,b){return score(b)-score(a);}).map(function(v){return v.name+" ("+v.lang+")";}); };
+  window.__rankVoices = function(list){ return list.slice().filter(function(v){ return score(v) >= 0; })
+    .sort(function(a, b){ return score(b) - score(a); }).map(function(v){ return v.name + " (" + v.lang + ")"; }); };
 })();
 </script>
 </body>
