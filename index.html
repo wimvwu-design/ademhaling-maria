@@ -10,6 +10,7 @@
 <meta name="theme-color" content="#eef3fb">
 <meta name="format-detection" content="telephone=no">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23eef3fb'/%3E%3Ccircle cx='90' cy='90' r='58' fill='%23b9d3f0'/%3E%3Ccircle cx='90' cy='90' r='36' fill='%23dfeaf8'/%3E%3C/svg%3E">
+<meta name="app-version" content="2026-10-04-trager-in-uit">
 <title>Ademhaling voor Maria</title>
 <style>
   :root{ --bg1:#eef3fb; --bg2:#f6eef8; --ink:#4a5568; --soft:#7b8794;
@@ -72,9 +73,9 @@
   <button id="startBtn" class="big-btn">Start</button>
   <div class="settings">
     <label>Tempo: <select id="optTempo">
-      <option value="1.3">Rustig</option>
-      <option value="1.6">Heel rustig</option>
-      <option value="1.0">Normaal</option>
+      <option value="rustig">Rustig</option>
+      <option value="heelrustig">Heel rustig</option>
+      <option value="normaal">Normaal</option>
     </select></label>
     <label>Pauze tussen rondes: <select id="optPause">
       <option value="5">5 s</option>
@@ -155,10 +156,14 @@
               "Heel goed.", "Laat alles maar los, Maria.", "Rustig en ontspannen.", "Je doet het prima."];
 
   // tempo en pauze (instelbaar op het startscherm)
-  var TEMPOS = ["1.3", "1.6", "1.0"], PAUSES = ["5", "8", "12"];
+  // per tempo: io = seconden per tel bij in- en uitademen (trager), hold = seconden per tel bij vasthouden
+  var TEMPOS = {"rustig":{io:2.0, hold:1.3}, "heelrustig":{io:2.5, hold:1.6}, "normaal":{io:1.6, hold:1.0}};
+  var OLD_TEMPOS = {"1.3":"rustig", "1.6":"heelrustig", "1.0":"normaal"};   // oude opgeslagen waarden -> nieuwe keuze
+  var PAUSES = ["5", "8", "12"];
   var optTempo = document.getElementById("optTempo"), optPause = document.getElementById("optPause");
   (function(){ var t = null, p = null; try{ t = localStorage.getItem("adem.tempo"); p = localStorage.getItem("adem.pause"); }catch(e){}
-    optTempo.value = TEMPOS.indexOf(t) >= 0 ? t : "1.3"; optPause.value = PAUSES.indexOf(p) >= 0 ? p : "8"; })();
+    if (t !== null && OLD_TEMPOS.hasOwnProperty(t)){ t = OLD_TEMPOS[t]; try{ localStorage.setItem("adem.tempo", t); }catch(e){} }
+    optTempo.value = TEMPOS.hasOwnProperty(t) ? t : "rustig"; optPause.value = PAUSES.indexOf(p) >= 0 ? p : "8"; })();
 
   var $ = function(id){ return document.getElementById(id); };
   var el = {start:$("start"), run:$("run"), end:$("end"), count:$("count"), phase:$("phase"), circle:$("circle"),
@@ -321,7 +326,7 @@
     try{ if ((synth.speaking || synth.pending) && curKind && keep.indexOf(curKind) < 0){ log("cancel", {kind:curKind}); cancelSpeech(); } }catch(e){}
   }
   function cueFor(key){   // kort signaal moet binnen één tel passen, anders de nog kortere variant
-    var P = PHASES[key]; return (planSeconds(P.cue) <= T - 0.1) ? P.cue : P.shortCue;
+    var P = PHASES[key]; return (planSeconds(P.cue) <= countDur(key) - 0.1) ? P.cue : P.shortCue;
   }
   function voiceUsable(){ return !!(synth && voiceOn && Utter); }
 
@@ -350,15 +355,16 @@
   // ================= Timing (performance.now, geen driftende setInterval) =================
   // Vooraf berekend schema: welkom, dan rondes (in/vast/uit + pauze). Totaal = precies TOTAL s, inclusief pauzes.
   // Een ronde begint alleen als in+vast+uit nog vóór TOTAL past; de resterende tijd wordt een rustige afsluitende rust.
-  function buildSchedule(T, P){
-    var segs = [], t = 0, c = 0;
+  // Tio = seconden per tel bij in- en uitademen, Th = seconden per tel bij vasthouden
+  function buildSchedule(Tio, Th, P){
+    var segs = [], t = 0, c = 0, CY = 12*Tio + 7*Th;   // in (4) + uit (8) aan Tio, vast (7) aan Th
     segs.push({key:"intro", start:0, dur:INTRO, cycle:-1}); t = INTRO;
-    while (t + 19*T <= TOTAL + 1e-9){
-      segs.push({key:"in",   start:t, dur:4*T, cycle:c}); t += 4*T;
-      segs.push({key:"hold", start:t, dur:7*T, cycle:c}); t += 7*T;
-      segs.push({key:"out",  start:t, dur:8*T, cycle:c}); t += 8*T;
+    while (t + CY <= TOTAL + 1e-9){
+      segs.push({key:"in",   start:t, dur:4*Tio, cd:Tio, cycle:c}); t += 4*Tio;
+      segs.push({key:"hold", start:t, dur:7*Th,  cd:Th,  cycle:c}); t += 7*Th;
+      segs.push({key:"out",  start:t, dur:8*Tio, cd:Tio, cycle:c}); t += 8*Tio;
       var pz = c < GENTLE_CYCLES ? Math.max(P, GENTLE_PAUSE) : P;
-      if (t + pz + 19*T > TOTAL + 1e-9){ if (TOTAL - t > 0.05) segs.push({key:"rest", start:t, dur:TOTAL - t, cycle:c}); t = TOTAL; break; }
+      if (t + pz + CY > TOTAL + 1e-9){ if (TOTAL - t > 0.05) segs.push({key:"rest", start:t, dur:TOTAL - t, cycle:c}); t = TOTAL; break; }
       segs.push({key:"pause", start:t, dur:pz, cycle:c}); t += pz; c++;
     }
     if (t < TOTAL - 0.05) segs.push({key:"rest", start:t, dur:TOTAL - t, cycle:c});
@@ -367,12 +373,13 @@
   }
   var running = false, paused = false, finished = false;
   var t0 = 0, pausedAt = 0, pausedTotal = 0, endAt = 0;
-  var T = 1.3, PAUSE = 8, SEGS = [], segIdx = -1, lastCountKey = "";
+  var T = 1.3, TIO = 2.0, PAUSE = 8, SEGS = [], segIdx = -1, lastCountKey = "";
   var nextEnc = ENC_EVERY, encIdx = 0, encTimer = null, pauseSpokenFor = -1;
   var rafId = 0, toId = 0;
   function sessionSec(){ if (!running && !finished) return 0; var n = paused ? pausedAt : performance.now(); return (n - t0 - pausedTotal) / 1000 * SPEED; }
   function fmt(s){ s = Math.max(0, Math.ceil(s - 1e-6)); var m = Math.floor(s / 60), r = s % 60; return (m < 10 ? "0" : "") + m + ":" + (r < 10 ? "0" : "") + r; }
   function ease(x){ return 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, x))); }
+  function countDur(key){ return key === "hold" ? T : TIO; }   // seconden per tel in deze fase
   function setCircleColor(c){ el.circle.style.background = "radial-gradient(circle at 40% 35%,rgba(255,255,255,.75)," + c + " 70%)"; }
 
   function enterSegment(g){
@@ -419,7 +426,7 @@
       g.precued = true; speakPhrase(PHASES["in"].cue, "precue", false);
     }
     if (P.len){
-      var n = Math.min(P.len, Math.floor(inP / T + 1e-9) + 1), ck = i + ":" + n;
+      var n = Math.min(P.len, Math.floor(inP / (g.cd || countDur(g.key)) + 1e-9) + 1), ck = i + ":" + n;
       if (ck !== lastCountKey){
         lastCountKey = ck; el.count.textContent = n; log("visual", {phase:g.key, n:n});
         if (!voiceUsable()) tick();
@@ -451,13 +458,14 @@
     // Alles in de tik zelf: audio ontgrendelen + spraak 'primen' met het welkomstwoord
     initAudio(); requestWake();
     if (synth){ loadVoices(); try{ synth.cancel(); synth.resume(); }catch(e){} }
-    T = parseFloat(optTempo.value) || 1.3; PAUSE = parseFloat(optPause.value) || 8;
+    var tp = TEMPOS[optTempo.value] || TEMPOS["rustig"];
+    TIO = tp.io; T = tp.hold; PAUSE = parseFloat(optPause.value) || 8;
     lsSet("adem.tempo", optTempo.value); lsSet("adem.pause", optPause.value);
-    SEGS = buildSchedule(T, PAUSE); segIdx = -1; lastCountKey = "";
+    SEGS = buildSchedule(TIO, T, PAUSE); segIdx = -1; lastCountKey = "";
     running = true; paused = false; finished = false;
     t0 = performance.now(); pausedTotal = 0;
     nextEnc = ENC_EVERY; encIdx = 0; endAt = TOTAL;
-    window.__log = []; log("start", {total:TOTAL, endAt:endAt, speed:SPEED, T:T, pause:PAUSE, voice: chosenVoice ? chosenVoice.name : null});
+    window.__log = []; log("start", {total:TOTAL, endAt:endAt, speed:SPEED, T:T, Tio:TIO, pause:PAUSE, voice: chosenVoice ? chosenVoice.name : null});
     el.enc.classList.remove("show"); el.pauseBtn.textContent = "Pauze"; el.pausedNote.textContent = "";
     el.count.textContent = ""; el.phase.textContent = "Welkom, Maria";
     el.circle.style.background = "radial-gradient(circle at 40% 35%,rgba(255,255,255,.75),var(--c-intro) 70%)";
@@ -521,7 +529,7 @@
   // test-hulpjes
   window.__state = function(){ return {running:running, paused:paused, finished:finished, elapsed:sessionSec(), endAt:endAt,
     voice: chosenVoice ? chosenVoice.name + " (" + chosenVoice.lang + ")" : null}; };
-  window.__schedule = function(t, p){ return buildSchedule(t, p); };
+  window.__schedule = function(tio, th, p){ return buildSchedule(tio, th, p); };
   window.__segs = function(){ return SEGS; };
   window.__learned = function(){ return learned; };
   window.__rankVoices = function(list){ return list.slice().filter(function(v){ return score(v) >= 0; })
